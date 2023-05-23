@@ -14,6 +14,11 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
+// userSchema.method.comparePassword = async function(candidatePassword: string): Promise<boolean> {
+    
+//     return true;
+// };
+
 const User = mongoose.model("user", userSchema);
 
 export default User;

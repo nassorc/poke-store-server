@@ -1,13 +1,27 @@
+import { Request } from "express";
 // Gloabl app types file
+interface extendedBody extends Request {
+    [key: string]: any,
+    locals?: {
+        user?: object
+    }
+}
 export interface httpRequestType {
-    body?: {
-        [key: string]: string | number | object 
+    body: any,
+    params?: object | string | number,
+    headers: {
+        "user-agent"?: string,
     },
-    params?: {
-        [key: string]: string | number | object 
-    },
+    locals?: {
+        user?: object
+    } 
 }
 
 export interface callbackHandlerFn {
-    (httpRequest: httpRequestType): {headers: object, statusCode: number, body: JSON} 
+    (httpRequest: httpRequestType): {headers: any, statusCode: number, body: any} 
+}
+export interface httpResponseType {
+    headers: object,
+    statusCode: number,
+    body: object | string,  
 }

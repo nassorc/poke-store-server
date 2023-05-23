@@ -1,11 +1,14 @@
-import { Request, Response, NextFunction } from "express";
-import { callbackHandlerFn } from "../types/appTypes";
+import { Request, Response } from "express";
+import { httpRequestType, httpResponseType } from "../types/appTypes";
 
-export const controllerHandler = (handler: callbackHandlerFn) => async (req: Request, res: Response, next: NextFunction) => {
-    const requestObject = {
+
+export const controllerHandler = (handler: (httpRequest: httpRequestType) => Promise<httpResponseType>) => async (req: Request, res: Response) => {
+    const requestObject: httpRequestType = {
         body: req.body,
         params: req.params,
+        headers: req.headers,
     };
+    // console.log(req.body);
     try {
         const responseObject = await handler(requestObject);
         if(responseObject.headers) {

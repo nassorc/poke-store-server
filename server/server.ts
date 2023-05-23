@@ -1,20 +1,21 @@
 import express from "express";
 import mongoose from "mongoose";
 import routes from "./routes";
+import { config } from "dotenv";
+import { deserializeUser } from "./middleware/deserializeUser";
+config();
+
 const app = express();
 
-app.get("/", (req, res) => {
-    console.log("access home");
-    res.sendStatus(200);
-});
-
+app.use(express.json());
+app.use(deserializeUser);
 routes(app);
 
 app.listen(3002, async () => {
     console.log("listening on port 3002");
-
     try {
-        await mongoose.connect("mongodb+srv://poke-store:poke-store@poke-store-cluster.sqlfntl.mongodb.net/?retryWrites=true&w=majority");
+        const connectionStr = process.env.MONGODB_URI || "";
+        await mongoose.connect(connectionStr);
         console.log("connected to database");
     }
     catch(error: any) {
