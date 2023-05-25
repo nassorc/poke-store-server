@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { httpRequestType, httpResponseType } from "../types/appTypes";
 
-
 export const controllerHandler = (handler: (httpRequest: httpRequestType) => Promise<httpResponseType>) => async (req: Request, res: Response) => {
     const requestObject: httpRequestType = {
         body: req.body,
@@ -13,6 +12,14 @@ export const controllerHandler = (handler: (httpRequest: httpRequestType) => Pro
         const responseObject = await handler(requestObject);
         if(responseObject.headers) {
             res.set(responseObject.headers);
+        }
+        if(responseObject.cookies) {
+            responseObject.cookies.forEach(cookie => {
+                console.log("Cookie");
+                console.log(Object.keys(cookie)[0]);
+                console.log(Object.values(cookie)[0]);
+                res.cookie(Object.keys(cookie)[0], Object.values(cookie)[0], { httpOnly: true });
+            });
         }
         res.type("json");
         res.status(responseObject.statusCode).send(responseObject.body);

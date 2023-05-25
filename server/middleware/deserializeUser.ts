@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction} from "express";
 import jwt from "jsonwebtoken";
 import { reIssueAccessToken } from "../services/session.service";
-import { verify } from "crypto";
 import { verifyJwt } from "../utils/jwt.utils";
 export const deserializeUser = async (req: Request, res: Response, next: NextFunction) => {
     const accessToken = req.headers.authorization?.split(" ")[1];
-    const refreshToken: string = (new String(req.headers?.["x-refresh"])).toString();
+    const refreshToken: string = req.cookies["refresh-jwt"];
 
     if(!accessToken || !refreshToken) return next();
 
@@ -51,13 +50,6 @@ export const deserializeUser = async (req: Request, res: Response, next: NextFun
         }
         return next();
     }
-
-    // if expired, check refresh token
-
-    // decode refresh token
-
-    // re issue access token or next
-    // add new access token on headers response object
 
     return next();
 };

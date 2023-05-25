@@ -1,5 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
+import cors from "cors";
 import routes from "./routes";
 import { config } from "dotenv";
 import { deserializeUser } from "./middleware/deserializeUser";
@@ -7,7 +9,9 @@ config();
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(deserializeUser);
 routes(app);
 
